@@ -1,5 +1,5 @@
-﻿using Refit;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using Refit;
 using VibrantIo.PosApi.Models;
 
 namespace VibrantIo.PosApi;
@@ -23,13 +23,15 @@ public interface ITerminalsOperations
     Task<ProcessPaymentIntent> ProcessPaymentIntentAsync(
         string terminalId,
         ProcessPaymentIntentInit paymentIntent,
+        [Header("Idempotency-Key")] string? idempotencyKey = null,
         CancellationToken cancellationToken = default
     );
 }
 
 public static class TerminalsOperaionsExtensions
 {
-    public static async IAsyncEnumerable<Terminal> GetAllAsync(this ITerminalsOperations terminals,
+    public static async IAsyncEnumerable<Terminal> GetAllAsync(
+        this ITerminalsOperations terminals,
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     )
     {
@@ -49,7 +51,11 @@ public static class TerminalsOperaionsExtensions
                 break;
             }
 
-            page = await terminals.GetAllAsync(DefaultLimit, page.Data.Last().Id, cancellationToken);
+            page = await terminals.GetAllAsync(
+                DefaultLimit,
+                page.Data.Last().Id,
+                cancellationToken
+            );
         }
     }
 }

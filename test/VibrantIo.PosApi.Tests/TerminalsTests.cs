@@ -49,6 +49,7 @@ public class TerminalsTests
     public async Task CanProcessPaymentIntent()
     {
         // Given
+        var idempotencyKey = Guid.NewGuid().ToString();
 
         // When
         var ppi = await _client.Terminals.ProcessPaymentIntentAsync(
@@ -56,7 +57,24 @@ public class TerminalsTests
             new()
             {
                 PaymentIntent = new() { Amount = 1234, Description = "Testkøb" }
-            }
+            },
+            idempotencyKey
+        );
+
+        var exception = await Assert.ThrowsAsync<VibrantApiException>(
+            () =>
+                _client.Terminals.ProcessPaymentIntentAsync(
+                    TerminalId,
+                    new()
+                    {
+                        PaymentIntent = new()
+                        {
+                            Amount = 1234,
+                            Description = "Should fail because the same idempotency key is used"
+                        }
+                    },
+                    idempotencyKey
+                )
         );
 
         // Then
@@ -67,5 +85,7 @@ public class TerminalsTests
         Assert.Equal(1234, pi.Amount);
         Assert.Equal(PaymentIntentStatus.RequiresPaymentMethod, pi.Status);
         Assert.Empty(pi.CancelationReason);
+
+        Assert.Equal(500, exception.Status);
     }
 }
