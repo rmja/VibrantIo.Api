@@ -7,12 +7,17 @@
     <Nullable>enable</Nullable>
     <Authors>Rasmus Melchior Jacobsen</Authors>
     <Description>Vibrant.io Push to Pay .NET API Client</Description>
-    <PackageProjectUrl>https://github.com/rmja/VibrantIoApi</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/rmja/VibrantIo.Api</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/rmja/VibrantIoApi.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/rmja/VibrantIo.Api.git</RepositoryUrl>
     <Version>0.0.1</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
