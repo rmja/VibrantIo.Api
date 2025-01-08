@@ -18,7 +18,7 @@ public class FactoryTests
                     options.ApiKey = TestSecrets.SandboxApiKey;
                 }
             )
-            .BuildServiceProvider();
+            .BuildServiceProvider(validateScopes: true);
         var factory = services.GetRequiredService<IVibrantPosApiClientFactory>();
 
         // When
@@ -33,7 +33,9 @@ public class FactoryTests
     public async Task CanCreateClientFromOptions()
     {
         // Given
-        var services = new ServiceCollection().AddVibrantPosApiFactory().BuildServiceProvider();
+        var services = new ServiceCollection()
+            .AddVibrantPosApiFactory()
+            .BuildServiceProvider(validateScopes: true);
         var factory = services.GetRequiredService<IVibrantPosApiClientFactory>();
 
         // When

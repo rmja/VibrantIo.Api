@@ -5,7 +5,7 @@ namespace VibrantIo.PosApi;
 
 public class VibrantPosApiClientFactory(
     IServiceProvider services,
-    IOptionsSnapshot<VibrantPosApiOptions> optionsSnapshot
+    IOptionsMonitor<VibrantPosApiOptions> optionsMonitor
 ) : IVibrantPosApiClientFactory
 {
     private readonly ObjectFactory<VibrantPosApiClient> _clientFactory =
@@ -13,7 +13,7 @@ public class VibrantPosApiClientFactory(
 
     public IVibrantPosApiClient Create(string name)
     {
-        var options = optionsSnapshot.Get(name);
+        var options = optionsMonitor.Get(name);
         return Create(options);
     }
 
