@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Options;
 using Refit;
 using VibrantIo.PosApi.Operations;
 
@@ -34,9 +33,9 @@ public class VibrantPosApiClient : IVibrantPosApiClient
 
     public ITerminalsOperations Terminals { get; }
 
-    public VibrantPosApiClient(HttpClient httpClient, IOptions<VibrantPosApiOptions> options)
+    public VibrantPosApiClient(HttpClient httpClient, VibrantPosApiOptions options)
     {
-        if (options.Value.Sandbox)
+        if (options.Sandbox)
         {
             httpClient.BaseAddress = new("https://pos-api.sandbox.vibrant.app");
         }
@@ -45,7 +44,7 @@ public class VibrantPosApiClient : IVibrantPosApiClient
             httpClient.BaseAddress = new("https://pos.api.vibrant.app");
         }
 
-        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("ApiKey", options.Value.ApiKey);
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("ApiKey", options.ApiKey);
 
         PaymentIntents = RestService.For<IPaymentIntentOperations>(httpClient, _refitSettings);
         Terminals = RestService.For<ITerminalsOperations>(httpClient, _refitSettings);

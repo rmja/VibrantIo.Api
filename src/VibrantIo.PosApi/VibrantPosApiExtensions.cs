@@ -1,4 +1,5 @@
-﻿using VibrantIo.PosApi;
+﻿using Microsoft.Extensions.Options;
+using VibrantIo.PosApi;
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 
@@ -8,16 +9,25 @@ public static class VibrantPosApiExtensions
 {
     public static IServiceCollection AddVibrantPosApi(
         this IServiceCollection services,
-        Action<VibrantPosApiOptions>? configureAction = null
+        Action<VibrantPosApiOptions>? configureOptions = null
     )
     {
         services.AddHttpClient<VibrantPosApiClient>();
 
         services.AddSingleton<IVibrantPosApiClientFactory, VibrantPosApiClientFactory>();
 
-        if (configureAction is not null)
+        if (configureOptions is not null)
         {
-            services.AddTransient<IVibrantPosApiClient, VibrantPosApiClient>().Configure(configureAction);
+            services
+                .AddTransient<IVibrantPosApiClient, VibrantPosApiClient>(provider =>
+                {
+                    var options = provider.GetRequiredService<IOptions<VibrantPosApiOptions>>();
+                    return ActivatorUtilities.CreateInstance<VibrantPosApiClient>(
+                        provider,
+                        options.Value
+                    );
+                })
+                .Configure(configureOptions);
         }
 
         return services;
