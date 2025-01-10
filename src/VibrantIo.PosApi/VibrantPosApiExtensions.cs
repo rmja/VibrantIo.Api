@@ -11,8 +11,6 @@ public static class VibrantPosApiExtensions
     /// <summary>
     /// Add a default Vibrant.io client to the <paramref name="services"/> service collection.
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="configureOptions"></param>
     /// <returns></returns>
     public static IServiceCollection AddVibrantPosApi(
         this IServiceCollection services,
@@ -31,9 +29,7 @@ public static class VibrantPosApiExtensions
 
     /// <summary>
     /// Add the Vibrant.io client factory to the <paramref name="services"/> service collection.
-    /// Named clients can be configured using
-    /// <code>services.Configure&lt;VibrantPosApiOptions&gt;("name of client", options => {})</code>
-    /// Clients are then obtained from the factory using <see cref="IVibrantPosApiClientFactory"/>.
+    /// Clients can be obtained from the <see cref="IVibrantPosApiClientFactory"/>.
     /// </summary>
     public static IServiceCollection AddVibrantPosApiFactory(this IServiceCollection services)
     {
