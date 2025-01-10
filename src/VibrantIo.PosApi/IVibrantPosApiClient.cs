@@ -1,9 +1,7 @@
-﻿using VibrantIo.PosApi.Operations;
-
-namespace VibrantIo.PosApi;
+﻿namespace VibrantIo.PosApi;
 
 public interface IVibrantPosApiClient
 {
-    IPaymentIntentOperations PaymentIntents { get; }
-    ITerminalsOperations Terminals { get; }
+    IPaymentIntents PaymentIntents { get; }
+    ITerminals Terminals { get; }
 }

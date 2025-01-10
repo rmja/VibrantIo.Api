@@ -29,9 +29,9 @@ public class VibrantPosApiClient : IVibrantPosApiClient
             }
         };
 
-    public IPaymentIntentOperations PaymentIntents { get; }
+    public IPaymentIntents PaymentIntents { get; }
 
-    public ITerminalsOperations Terminals { get; }
+    public ITerminals Terminals { get; }
 
     public VibrantPosApiClient(HttpClient httpClient, VibrantPosApiOptions options)
     {
@@ -46,7 +46,7 @@ public class VibrantPosApiClient : IVibrantPosApiClient
 
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation("ApiKey", options.ApiKey);
 
-        PaymentIntents = RestService.For<IPaymentIntentOperations>(httpClient, _refitSettings);
-        Terminals = RestService.For<ITerminalsOperations>(httpClient, _refitSettings);
+        PaymentIntents = RestService.For<IPaymentIntents>(httpClient, _refitSettings);
+        Terminals = RestService.For<ITerminals>(httpClient, _refitSettings);
     }
 }

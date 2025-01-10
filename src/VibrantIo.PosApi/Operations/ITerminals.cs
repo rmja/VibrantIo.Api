@@ -4,7 +4,7 @@ using VibrantIo.PosApi.Models;
 
 namespace VibrantIo.PosApi;
 
-public interface ITerminalsOperations
+public interface ITerminals
 {
     // https://pos.api.vibrant.app/docs#/terminals/TerminalController_GetTerminals
     [Get("/pos/v1/terminals")]
@@ -31,7 +31,7 @@ public interface ITerminalsOperations
 public static class TerminalsOperaionsExtensions
 {
     public static async IAsyncEnumerable<Terminal> GetAllAsync(
-        this ITerminalsOperations terminals,
+        this ITerminals terminals,
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     )
     {
