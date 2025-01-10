@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using VibrantIo.PosApi.Models;
+using VibrantIo.PosApi.PaymentIntents;
+using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi.Tests;
 

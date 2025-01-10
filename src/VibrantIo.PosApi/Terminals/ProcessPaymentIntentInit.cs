@@ -1,4 +1,6 @@
-﻿namespace VibrantIo.PosApi.Models;
+﻿using VibrantIo.PosApi.PaymentIntents;
+
+namespace VibrantIo.PosApi.Terminals;
 
 public record ProcessPaymentIntentInit
 {

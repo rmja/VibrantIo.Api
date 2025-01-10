@@ -1,4 +1,4 @@
-﻿namespace VibrantIo.PosApi.Models;
+﻿namespace VibrantIo.PosApi.PaymentIntents;
 
 public enum PaymentIntentStatus
 {

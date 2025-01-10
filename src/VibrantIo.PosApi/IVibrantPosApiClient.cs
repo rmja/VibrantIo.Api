@@ -1,4 +1,6 @@
-﻿namespace VibrantIo.PosApi;
+﻿using VibrantIo.PosApi.PaymentIntents;
+
+namespace VibrantIo.PosApi;
 
 public interface IVibrantPosApiClient
 {

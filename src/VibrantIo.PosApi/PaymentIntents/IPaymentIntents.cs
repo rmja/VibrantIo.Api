@@ -1,7 +1,6 @@
 ﻿using Refit;
-using VibrantIo.PosApi.Models;
 
-namespace VibrantIo.PosApi;
+namespace VibrantIo.PosApi.PaymentIntents;
 
 public interface IPaymentIntents
 {

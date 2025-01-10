@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using Refit;
-using VibrantIo.PosApi.Models;
+using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi;
 
