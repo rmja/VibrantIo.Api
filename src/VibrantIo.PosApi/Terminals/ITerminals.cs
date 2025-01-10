@@ -1,8 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Refit;
-using VibrantIo.PosApi.Terminals;
 
-namespace VibrantIo.PosApi;
+namespace VibrantIo.PosApi.Terminals;
 
 public interface ITerminals
 {
@@ -28,7 +27,7 @@ public interface ITerminals
     );
 }
 
-public static class TerminalsOperaionsExtensions
+public static class TerminalsExtensions
 {
     public static async IAsyncEnumerable<Terminal> GetAllAsync(
         this ITerminals terminals,

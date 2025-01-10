@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Refit;
 using VibrantIo.PosApi.PaymentIntents;
+using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi;
 

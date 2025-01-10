@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi.Tests;
 
