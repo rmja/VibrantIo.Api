@@ -15,10 +15,12 @@ public class FactoryTests
         var factory = services.GetRequiredService<IVibrantPosApiClientFactory>();
 
         // When
-        var client = factory.Create(new() { Sandbox = true, ApiKey = TestSecrets.SandboxApiKey });
+        var client = factory.Create(
+            new() { ApiKey = TestSecrets.ApiKey, Sandbox = TestSecrets.Sandbox }
+        );
 
         // Then
         var terminals = await client.Terminals.GetAllAsync().ToListAsync();
-        Assert.Equal(3, terminals.Count);
+        Assert.Equal(2, terminals.Count);
     }
 }

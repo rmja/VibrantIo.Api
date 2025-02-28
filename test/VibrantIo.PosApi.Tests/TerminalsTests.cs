@@ -7,15 +7,15 @@ namespace VibrantIo.PosApi.Tests;
 public class TerminalsTests
 {
     private readonly IVibrantPosApiClient _client;
-    private const string TerminalId = "30320391"; // Terminal 1 in VB sandbox
+    private const string TerminalId = "ti_dtp8BLu1XQusNMWcSQiXnu"; // TJ2
 
     public TerminalsTests()
     {
         var services = new ServiceCollection()
             .AddVibrantPosApi(options =>
             {
-                options.Sandbox = true;
-                options.ApiKey = TestSecrets.SandboxApiKey;
+                options.ApiKey = TestSecrets.ApiKey;
+                options.Sandbox = TestSecrets.Sandbox;
             })
             .BuildServiceProvider();
         _client = services.GetRequiredService<IVibrantPosApiClient>();
@@ -30,7 +30,7 @@ public class TerminalsTests
         var terminals = await _client.Terminals.GetAllAsync().ToListAsync();
 
         // Then
-        Assert.Equal(3, terminals.Count);
+        Assert.Equal(2, terminals.Count);
         Assert.All(terminals, x => Assert.Equal(TerminalMode.Terminal, x.Mode));
     }
 
@@ -43,7 +43,7 @@ public class TerminalsTests
         var terminal = await _client.Terminals.GetByIdAsync(TerminalId);
 
         // Then
-        Assert.Equal("Terminal 1", terminal.Name);
+        Assert.Equal("TJ2", terminal.Name);
     }
 
     [Fact]
