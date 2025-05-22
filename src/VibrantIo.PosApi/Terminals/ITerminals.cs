@@ -32,32 +32,13 @@ public interface ITerminals
 
 public static class TerminalsExtensions
 {
-    public static async IAsyncEnumerable<Terminal> ListTerminalsAsync(
-        this ITerminals terminals,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default
-    )
-    {
-        const int DefaultLimit = 100;
-
-        var page = await terminals.ListTerminalsAsync(DefaultLimit, null, cancellationToken);
-
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            foreach (var item in page.Data)
-            {
-                yield return item;
-            }
-
-            if (!page.HasMore)
-            {
-                break;
-            }
-
-            page = await terminals.ListTerminalsAsync(
-                DefaultLimit,
-                page.Data.Last().Id,
-                cancellationToken
-            );
-        }
-    }
+    public static IAsyncEnumerable<Terminal> ListTerminalsAsync(this ITerminals terminals) =>
+        new PaginationEnumerable<Terminal>(
+            (lastId, cancellationToken) =>
+                terminals.ListTerminalsAsync(
+                    Constants.DefaultPaginationLimit,
+                    startingAfter: lastId,
+                    cancellationToken
+                )
+        );
 }

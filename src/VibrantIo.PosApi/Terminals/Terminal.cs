@@ -1,6 +1,6 @@
 ﻿namespace VibrantIo.PosApi.Terminals;
 
-public record Terminal
+public record Terminal : IPaginateableObject
 {
     public required string Id { get; set; }
     public required string AccountId { get; set; }
