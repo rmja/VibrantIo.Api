@@ -22,12 +22,12 @@ public class TerminalsTests
     }
 
     [Fact]
-    public async Task CanGetAll()
+    public async Task CanListTerminals()
     {
         // Given
 
         // When
-        var terminals = await _client.Terminals.GetAllAsync().ToListAsync();
+        var terminals = await _client.Terminals.ListTerminalsAsync().ToListAsync();
 
         // Then
         Assert.Equal(2, terminals.Count);
@@ -35,12 +35,12 @@ public class TerminalsTests
     }
 
     [Fact]
-    public async Task CanGetById()
+    public async Task CanGetTerminal()
     {
         // Given
 
         // When
-        var terminal = await _client.Terminals.GetByIdAsync(TerminalId);
+        var terminal = await _client.Terminals.GetTerminalAsync(TerminalId);
 
         // Then
         Assert.Equal("TJ2", terminal.Name);
@@ -82,7 +82,7 @@ public class TerminalsTests
         Assert.Equal(TerminalId, ppi.TerminalId);
         Assert.NotNull(ppi.ObjectIdToProcess);
 
-        var pi = await _client.PaymentIntents.GetByIdAsync(ppi.ObjectIdToProcess);
+        var pi = await _client.PaymentIntents.GetPaymentIntentAsync(ppi.ObjectIdToProcess);
         Assert.Equal(1234, pi.Amount);
         Assert.Equal(PaymentIntentStatus.RequiresPaymentMethod, pi.Status);
         Assert.Empty(pi.CancelationReason);

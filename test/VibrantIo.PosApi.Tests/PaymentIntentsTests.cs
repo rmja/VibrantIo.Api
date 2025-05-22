@@ -25,7 +25,7 @@ public class PaymentIntentsTests
         var id = "pi_3cF5dn8W4qom2CDHvTte8p";
 
         // When
-        var paymentIntent = await _client.PaymentIntents.GetByIdAsync(id);
+        var paymentIntent = await _client.PaymentIntents.GetPaymentIntentAsync(id);
 
         // Then
         Assert.Equal(id, paymentIntent.Id);

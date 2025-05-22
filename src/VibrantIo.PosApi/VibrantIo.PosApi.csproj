@@ -5,6 +5,7 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
     <Authors>Rasmus Melchior Jacobsen</Authors>
     <Description>Vibrant.io Push to Pay .NET API Client</Description>
     <PackageProjectUrl>https://github.com/rmja/VibrantIo.Api</PackageProjectUrl>

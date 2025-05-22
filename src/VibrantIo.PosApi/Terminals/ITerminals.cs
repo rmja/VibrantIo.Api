@@ -7,7 +7,7 @@ public interface ITerminals
 {
     // https://pos.api.vibrant.app/docs#/terminals/TerminalController_GetTerminals
     [Get("/pos/v1/terminals")]
-    internal Task<PagedList<Terminal>> GetAllAsync(
+    internal Task<PagedList<Terminal>> ListTerminalsAsync(
         int limit,
         [AliasAs("starting_after")] string? startingAfter,
         CancellationToken cancellationToken
@@ -15,7 +15,10 @@ public interface ITerminals
 
     // https://pos.api.vibrant.app/docs#/terminals/TerminalController_getTerminal
     [Get("/pos/v1/terminals/{terminalId}")]
-    Task<Terminal> GetByIdAsync(string terminalId, CancellationToken cancellationToken = default);
+    Task<Terminal> GetTerminalAsync(
+        string terminalId,
+        CancellationToken cancellationToken = default
+    );
 
     // https://pos.api.vibrant.app/docs#/terminals/TerminalController_processPaymentIntent
     [Post("/pos/v1/terminals/{terminalId}/process_payment_intent")]
@@ -29,14 +32,14 @@ public interface ITerminals
 
 public static class TerminalsExtensions
 {
-    public static async IAsyncEnumerable<Terminal> GetAllAsync(
+    public static async IAsyncEnumerable<Terminal> ListTerminalsAsync(
         this ITerminals terminals,
         [EnumeratorCancellation] CancellationToken cancellationToken = default
     )
     {
         const int DefaultLimit = 100;
 
-        var page = await terminals.GetAllAsync(DefaultLimit, null, cancellationToken);
+        var page = await terminals.ListTerminalsAsync(DefaultLimit, null, cancellationToken);
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -50,7 +53,7 @@ public static class TerminalsExtensions
                 break;
             }
 
-            page = await terminals.GetAllAsync(
+            page = await terminals.ListTerminalsAsync(
                 DefaultLimit,
                 page.Data.Last().Id,
                 cancellationToken
