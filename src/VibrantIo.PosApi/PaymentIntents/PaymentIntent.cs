@@ -9,6 +9,7 @@ public record PaymentIntent
     /// </summary>
     public int Amount { get; set; }
     public required string Description { get; set; }
+    public required string Currency { get; set; }
 
     /// <summary>
     /// Charge id associated with this payment intent

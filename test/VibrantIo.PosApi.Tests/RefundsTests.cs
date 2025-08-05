@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using VibrantIo.PosApi.Charges;
+using VibrantIo.PosApi.Refunds;
 
 namespace VibrantIo.PosApi.Tests;
 
-public class ChargesTests
+public class RefundsTests
 {
     private readonly IVibrantPosApiClient _client;
 
-    public ChargesTests()
+    public RefundsTests()
     {
         var services = new ServiceCollection()
             .AddVibrantPosApi(options =>
@@ -20,15 +20,15 @@ public class ChargesTests
     }
 
     [Fact]
-    public async Task CanListCharges()
+    public async Task CanListRefunds()
     {
         // Given
 
         // When
-        var charges = await _client.Charges.ListChargesAsync().ToListAsync();
+        var refunds = await _client.Refunds.ListRefundsAsync().ToListAsync();
 
         // Then
-        Assert.True(charges.Count > 18);
-        Assert.All(charges, x => Assert.Equal(DateTimeKind.Utc, x.Created.Kind));
+        Assert.True(refunds.Count > 2);
+        Assert.All(refunds, x => Assert.Equal(DateTimeKind.Utc, x.Created.Kind));
     }
 }

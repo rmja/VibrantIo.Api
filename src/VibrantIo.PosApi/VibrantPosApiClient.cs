@@ -2,35 +2,37 @@
 using Refit;
 using VibrantIo.PosApi.Charges;
 using VibrantIo.PosApi.PaymentIntents;
+using VibrantIo.PosApi.Refunds;
 using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi;
 
 public class VibrantPosApiClient : IVibrantPosApiClient
 {
-    private static readonly RefitSettings _refitSettings =
-        new()
+    private static readonly RefitSettings _refitSettings = new()
+    {
+        ContentSerializer = new SystemTextJsonContentSerializer(
+            VibrantPosApiSerializerContext.Default.Options
+        ),
+        ExceptionFactory = async response =>
         {
-            ContentSerializer = new SystemTextJsonContentSerializer(
-                VibrantPosApiSerializerContext.Default.Options
-            ),
-            ExceptionFactory = async response =>
+            if (response.IsSuccessStatusCode)
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    return null;
-                }
-                var error = await response.Content.ReadFromJsonAsync(
-                    VibrantPosApiSerializerContext.Default.ErrorResponse
-                );
-                return new VibrantApiException(error!.Status, error.Error);
+                return null;
             }
-        };
+            var error = await response.Content.ReadFromJsonAsync(
+                VibrantPosApiSerializerContext.Default.ErrorResponse
+            );
+            return new VibrantApiException(
+                error!.StatusCode,
+                error.Error + ": " + string.Join(",", error.Message)
+            );
+        },
+    };
 
     public ICharges Charges { get; }
-
     public IPaymentIntents PaymentIntents { get; }
-
+    public IRefunds Refunds { get; }
     public ITerminals Terminals { get; }
 
     public VibrantPosApiClient(HttpClient httpClient, VibrantPosApiOptions options)
@@ -43,6 +45,7 @@ public class VibrantPosApiClient : IVibrantPosApiClient
 
         Charges = RestService.For<ICharges>(httpClient, _refitSettings);
         PaymentIntents = RestService.For<IPaymentIntents>(httpClient, _refitSettings);
+        Refunds = RestService.For<IRefunds>(httpClient, _refitSettings);
         Terminals = RestService.For<ITerminals>(httpClient, _refitSettings);
     }
 }

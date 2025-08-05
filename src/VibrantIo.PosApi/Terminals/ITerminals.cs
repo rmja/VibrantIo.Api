@@ -22,9 +22,18 @@ public interface ITerminals
 
     // https://pos.api.vibrant.app/docs#/terminals/TerminalController_processPaymentIntent
     [Post("/pos/v1/terminals/{terminalId}/process_payment_intent")]
-    Task<ProcessPaymentIntent> ProcessPaymentIntentAsync(
+    Task<CommandResponse> ProcessPaymentIntentAsync(
         string terminalId,
         ProcessPaymentIntentInit paymentIntent,
+        [Header("Idempotency-Key")] string? idempotencyKey = null,
+        CancellationToken cancellationToken = default
+    );
+
+    // https://pos.api.vibrant.app/docs#/terminals/TerminalController_processRefund
+    [Post("/pos/v1/terminals/{terminalId}/process_refund")]
+    Task<CommandResponse> ProcessRefundAsync(
+        string terminalId,
+        ProcessRefundInit refund,
         [Header("Idempotency-Key")] string? idempotencyKey = null,
         CancellationToken cancellationToken = default
     );

@@ -21,6 +21,6 @@ public class FactoryTests
 
         // Then
         var terminals = await client.Terminals.ListTerminalsAsync().ToListAsync();
-        Assert.Equal(2, terminals.Count);
+        Assert.Equal(3, terminals.Count);
     }
 }

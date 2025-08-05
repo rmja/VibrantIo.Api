@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using VibrantIo.PosApi.PaymentIntents;
+using VibrantIo.PosApi.Refunds;
 using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi.Tests;
@@ -30,7 +32,7 @@ public class TerminalsTests
         var terminals = await _client.Terminals.ListTerminalsAsync().ToListAsync();
 
         // Then
-        Assert.Equal(2, terminals.Count);
+        Assert.Equal(3, terminals.Count);
         Assert.All(terminals, x => Assert.Equal(TerminalMode.Terminal, x.Mode));
     }
 
@@ -53,40 +55,68 @@ public class TerminalsTests
         var idempotencyKey = Guid.NewGuid().ToString();
 
         // When
-        var ppi = await _client.Terminals.ProcessPaymentIntentAsync(
+        var response = await _client.Terminals.ProcessPaymentIntentAsync(
             TerminalId,
             new()
             {
-                PaymentIntent = new() { Amount = 1234, Description = "Testkøb" }
+                PaymentIntent = new() { Amount = 1234, Description = "Testkøb" },
             },
             idempotencyKey
         );
 
-        var exception = await Assert.ThrowsAsync<VibrantApiException>(
-            () =>
-                _client.Terminals.ProcessPaymentIntentAsync(
-                    TerminalId,
-                    new()
+        var exception = await Assert.ThrowsAsync<VibrantApiException>(() =>
+            _client.Terminals.ProcessPaymentIntentAsync(
+                TerminalId,
+                new()
+                {
+                    PaymentIntent = new()
                     {
-                        PaymentIntent = new()
-                        {
-                            Amount = 1234,
-                            Description = "Should fail because the same idempotency key is used"
-                        }
+                        Amount = 1234,
+                        Description = "Should fail because the same idempotency key is used",
                     },
-                    idempotencyKey
-                )
+                },
+                idempotencyKey
+            )
         );
 
         // Then
-        Assert.Equal(TerminalId, ppi.TerminalId);
-        Assert.NotNull(ppi.ObjectIdToProcess);
+        Assert.Equal(TerminalId, response.TerminalId);
+        Assert.NotNull(response.ObjectIdToProcess);
 
-        var pi = await _client.PaymentIntents.GetPaymentIntentAsync(ppi.ObjectIdToProcess);
-        Assert.Equal(1234, pi.Amount);
-        Assert.Equal(PaymentIntentStatus.RequiresPaymentMethod, pi.Status);
-        Assert.Empty(pi.CancelationReason);
+        var paymentIntent = await _client.PaymentIntents.GetPaymentIntentAsync(
+            response.ObjectIdToProcess
+        );
+        Assert.Equal(1234, paymentIntent.Amount);
+        Assert.Equal(PaymentIntentStatus.RequiresPaymentMethod, paymentIntent.Status);
+        Assert.Empty(paymentIntent.CancelationReason);
 
         Assert.Equal(500, exception.Status);
+    }
+
+    [Fact]
+    public async Task CanProcessRefund()
+    {
+        // Given
+        const string chargeId = "ch_ZQwCWdDzUq8rZ5VCPrSiSY";
+
+        // When
+        var response = await _client.Terminals.ProcessRefundAsync(
+            TerminalId,
+            new()
+            {
+                Refund = new() { ChargeId = chargeId, Description = "Test refund" },
+            },
+            idempotencyKey: null,
+            TestContext.Current.CancellationToken
+        );
+
+        // Then
+        Assert.Equal(TerminalId, response.TerminalId);
+        Assert.NotNull(response.ObjectIdToProcess);
+
+        var refund = await _client.Refunds.GetRefundAsync(response.ObjectIdToProcess);
+        Assert.Equal(1234, refund.Amount);
+        Assert.Equal(RefundReason.RequestedByCustomer, refund.Reason);
+        Assert.Equal("DKK", refund.Currency);
     }
 }
