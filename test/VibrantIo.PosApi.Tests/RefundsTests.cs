@@ -25,7 +25,9 @@ public class RefundsTests
         // Given
 
         // When
-        var refunds = await _client.Refunds.ListRefundsAsync().ToListAsync();
+        var refunds = await _client
+            .Refunds.ListRefundsAsync()
+            .ToListAsync(TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(refunds.Count > 2);

@@ -25,7 +25,9 @@ public class ChargesTests
         // Given
 
         // When
-        var charges = await _client.Charges.ListChargesAsync().ToListAsync();
+        var charges = await _client
+            .Charges.ListChargesAsync()
+            .ToListAsync(TestContext.Current.CancellationToken);
 
         // Then
         Assert.True(charges.Count > 18);

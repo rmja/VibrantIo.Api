@@ -20,7 +20,9 @@ public class FactoryTests
         );
 
         // Then
-        var terminals = await client.Terminals.ListTerminalsAsync().ToListAsync();
+        var terminals = await client
+            .Terminals.ListTerminalsAsync()
+            .ToListAsync(TestContext.Current.CancellationToken);
         Assert.Equal(3, terminals.Count);
     }
 }

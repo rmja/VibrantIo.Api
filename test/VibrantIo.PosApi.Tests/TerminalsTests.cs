@@ -29,7 +29,9 @@ public class TerminalsTests
         // Given
 
         // When
-        var terminals = await _client.Terminals.ListTerminalsAsync().ToListAsync();
+        var terminals = await _client
+            .Terminals.ListTerminalsAsync()
+            .ToListAsync(TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(3, terminals.Count);
@@ -42,7 +44,10 @@ public class TerminalsTests
         // Given
 
         // When
-        var terminal = await _client.Terminals.GetTerminalAsync(TerminalId);
+        var terminal = await _client.Terminals.GetTerminalAsync(
+            TerminalId,
+            TestContext.Current.CancellationToken
+        );
 
         // Then
         Assert.Equal("TJ2", terminal.Name);
@@ -61,7 +66,8 @@ public class TerminalsTests
             {
                 PaymentIntent = new() { Amount = 1234, Description = "Testkøb" },
             },
-            idempotencyKey
+            idempotencyKey,
+            TestContext.Current.CancellationToken
         );
 
         var exception = await Assert.ThrowsAsync<VibrantApiException>(() =>
@@ -75,7 +81,8 @@ public class TerminalsTests
                         Description = "Should fail because the same idempotency key is used",
                     },
                 },
-                idempotencyKey
+                idempotencyKey,
+                TestContext.Current.CancellationToken
             )
         );
 
@@ -84,7 +91,8 @@ public class TerminalsTests
         Assert.NotNull(response.ObjectIdToProcess);
 
         var paymentIntent = await _client.PaymentIntents.GetPaymentIntentAsync(
-            response.ObjectIdToProcess
+            response.ObjectIdToProcess,
+            TestContext.Current.CancellationToken
         );
         Assert.Equal(1234, paymentIntent.Amount);
         Assert.Equal(PaymentIntentStatus.RequiresPaymentMethod, paymentIntent.Status);
@@ -114,7 +122,10 @@ public class TerminalsTests
         Assert.Equal(TerminalId, response.TerminalId);
         Assert.NotNull(response.ObjectIdToProcess);
 
-        var refund = await _client.Refunds.GetRefundAsync(response.ObjectIdToProcess);
+        var refund = await _client.Refunds.GetRefundAsync(
+            response.ObjectIdToProcess,
+            TestContext.Current.CancellationToken
+        );
         Assert.Equal(1234, refund.Amount);
         Assert.Equal(RefundReason.RequestedByCustomer, refund.Reason);
         Assert.Equal("DKK", refund.Currency);
