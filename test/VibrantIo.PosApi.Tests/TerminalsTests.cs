@@ -108,11 +108,19 @@ public class TerminalsTests
         const string chargeId = "ch_ZQwCWdDzUq8rZ5VCPrSiSY";
 
         // When
+        var charge = await _client.Charges.GetChargeAsync(
+            chargeId,
+            TestContext.Current.CancellationToken
+        );
         var response = await _client.Terminals.ProcessRefundAsync(
             TerminalId,
             new()
             {
-                Refund = new() { ChargeId = chargeId, Description = "Test refund" },
+                Refund = new()
+                {
+                    PaymentIntentId = charge.PaymentIntent,
+                    Description = "Test refund",
+                },
             },
             idempotencyKey: null,
             TestContext.Current.CancellationToken
