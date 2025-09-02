@@ -1,23 +1,20 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using VibrantIo.PosApi.Terminals;
+﻿using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi.Tests;
 
-public class FactoryTests
+public class FactoryTests(ApiFixture fixture) : IClassFixture<ApiFixture>
 {
     [Fact]
     public async Task CanCreateClient()
     {
         // Given
-        var services = new ServiceCollection()
-            .AddVibrantPosApiFactory()
-            .BuildServiceProvider(validateScopes: true);
-        var factory = services.GetRequiredService<IVibrantPosApiClientFactory>();
 
         // When
-        var client = factory.Create(
-            new() { ApiKey = TestSecrets.ApiKey, Sandbox = TestSecrets.Sandbox }
-        );
+        var client = fixture.Factory.Create(new VibrantPosApiOptions
+        {
+            ApiKey = fixture.ApiKey,
+            Sandbox = fixture.Sandbox,
+        });
 
         // Then
         var terminals = await client

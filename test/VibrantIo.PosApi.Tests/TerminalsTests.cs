@@ -1,27 +1,13 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.DependencyInjection;
-using VibrantIo.PosApi.PaymentIntents;
+﻿using VibrantIo.PosApi.PaymentIntents;
 using VibrantIo.PosApi.Refunds;
 using VibrantIo.PosApi.Terminals;
 
 namespace VibrantIo.PosApi.Tests;
 
-public class TerminalsTests
+public class TerminalsTests(ApiFixture fixture) : IClassFixture<ApiFixture>
 {
-    private readonly IVibrantPosApiClient _client;
+    private readonly IVibrantPosApiClient _client = fixture.Client;
     private const string TerminalId = "ti_dtp8BLu1XQusNMWcSQiXnu"; // TJ2
-
-    public TerminalsTests()
-    {
-        var services = new ServiceCollection()
-            .AddVibrantPosApi(options =>
-            {
-                options.ApiKey = TestSecrets.ApiKey;
-                options.Sandbox = TestSecrets.Sandbox;
-            })
-            .BuildServiceProvider();
-        _client = services.GetRequiredService<IVibrantPosApiClient>();
-    }
 
     [Fact]
     public async Task CanListTerminals()
