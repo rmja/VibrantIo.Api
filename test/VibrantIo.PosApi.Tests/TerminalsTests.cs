@@ -20,7 +20,7 @@ public class TerminalsTests(ApiFixture fixture) : IClassFixture<ApiFixture>
             .ToListAsync(TestContext.Current.CancellationToken);
 
         // Then
-        Assert.Equal(3, terminals.Count);
+        Assert.Equal(4, terminals.Count);
         Assert.All(terminals, x => Assert.Equal(TerminalMode.Terminal, x.Mode));
     }
 

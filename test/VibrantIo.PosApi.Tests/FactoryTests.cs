@@ -10,16 +10,14 @@ public class FactoryTests(ApiFixture fixture) : IClassFixture<ApiFixture>
         // Given
 
         // When
-        var client = fixture.Factory.Create(new VibrantPosApiOptions
-        {
-            ApiKey = fixture.ApiKey,
-            Sandbox = fixture.Sandbox,
-        });
+        var client = fixture.Factory.Create(
+            new VibrantPosApiOptions { ApiKey = fixture.ApiKey, Sandbox = fixture.Sandbox }
+        );
 
         // Then
         var terminals = await client
             .Terminals.ListTerminalsAsync()
             .ToListAsync(TestContext.Current.CancellationToken);
-        Assert.Equal(3, terminals.Count);
+        Assert.Equal(4, terminals.Count);
     }
 }
