@@ -1,4 +1,7 @@
-﻿namespace VibrantIo.PosApi;
+﻿using System.Text.Json.Serialization;
+using VibrantIo.PosApi.JsonConverters;
+
+namespace VibrantIo.PosApi;
 
 internal class ErrorResponse
 {
@@ -9,5 +12,7 @@ internal class ErrorResponse
     }
     public int StatusCode { get; set; }
     public string? Error { get; set; }
+
+    [JsonConverter(typeof(ErrorMessageJsonConverter))]
     public string[] Message { get; set; } = [];
 }
