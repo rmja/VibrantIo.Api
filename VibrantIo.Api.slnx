@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/VibrantIo.PosApi/VibrantIo.PosApi.csproj" />
+  <Project Path="test/VibrantIo.PosApi.Tests/VibrantIo.PosApi.Tests.csproj" />
+</Solution>
