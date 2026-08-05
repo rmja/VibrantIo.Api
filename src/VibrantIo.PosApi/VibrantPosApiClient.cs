@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
 using Refit;
 using VibrantIo.PosApi.Charges;
 using VibrantIo.PosApi.PaymentIntents;
@@ -43,9 +44,9 @@ public class VibrantPosApiClient : IVibrantPosApiClient
 
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation("ApiKey", options.ApiKey);
 
-        Charges = RestService.For<ICharges>(httpClient, _refitSettings);
-        PaymentIntents = RestService.For<IPaymentIntents>(httpClient, _refitSettings);
-        Refunds = RestService.For<IRefunds>(httpClient, _refitSettings);
-        Terminals = RestService.For<ITerminals>(httpClient, _refitSettings);
+        Charges = RestService.ForGenerated<ICharges>(httpClient, _refitSettings);
+        PaymentIntents = RestService.ForGenerated<IPaymentIntents>(httpClient, _refitSettings);
+        Refunds = RestService.ForGenerated<IRefunds>(httpClient, _refitSettings);
+        Terminals = RestService.ForGenerated<ITerminals>(httpClient, _refitSettings);
     }
 }

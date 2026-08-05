@@ -1,25 +1,29 @@
-﻿#if NETSTANDARD2_0
+﻿#if NET462
 
 using System.ComponentModel;
 
 namespace System.Runtime.CompilerServices
 {
+    /// <summary>
+    /// Reserved to be used by the compiler for tracking metadata.
+    /// This class should not be used by developers in source code.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    internal static class IsExternalInit { }
 
     /// <summary>
     /// Reserved to be used by the compiler for tracking metadata.
     /// This class should not be used by developers in source code.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal static class IsExternalInit
-    {
-    }
-
-    /// <summary>
-    /// Reserved to be used by the compiler for tracking metadata.
-    /// This class should not be used by developers in source code.
-    /// </summary>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(
+        AttributeTargets.Class
+            | AttributeTargets.Struct
+            | AttributeTargets.Field
+            | AttributeTargets.Property,
+        AllowMultiple = false,
+        Inherited = false
+    )]
     internal sealed class RequiredMemberAttribute : Attribute { }
 
     /// <summary>

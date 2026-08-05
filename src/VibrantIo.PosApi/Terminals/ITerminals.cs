@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Refit;
+﻿using Refit;
 
 namespace VibrantIo.PosApi.Terminals;
 
